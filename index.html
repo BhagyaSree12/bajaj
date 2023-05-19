@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Bajaj Task</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h4>Employee Search Bar</h4>
+  <input type="text" id="searchName" placeholder="Search by name">
+  <input type="text" id="searchDesignationSkills" placeholder="Filter by designation/skills">
+  <div id="employeeList"></div>
+
+  <h4>Table Display</h4>
+  <table id="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Designation</th>
+        <th>Skills</th>
+      </tr>
+    </thead>
+    <tbody id="data-body"></tbody>
+  </table>
+
+  <script>
+    // Function to fetch JSON data from URL
+    function fetchJSONData(url) {
+      return fetch(url)
+        .then(response => response.json())
+        .then(data => data.employees)
+        .catch(error => {
+          console.error('Error:', error);
+          return [];
+        });
+    }
+
+    // Function to generate HTML table rows from JSON data
+    function generateTableRows(data) {
+      const tableBody = document.getElementById('data-body');
+
+      data.forEach(employee => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${employee.id}</td>
+          <td>${employee.name || '-'}</td>
+          <td>${employee.designation || '-'}</td>
+          <td>${employee.skills.join(', ')}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Fetch JSON data from the provided URL and generate table rows
+    fetchJSONData('https://raw.githubusercontent.com/dixitsoham7/dixitsoham7.github.io/main/index.json')
+      .then(data => generateTableRows(data));
+  </script>
+</body>
+</html>
